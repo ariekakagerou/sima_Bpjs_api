@@ -1,0 +1,235 @@
+{
+    "testData": {
+        "admin": [{
+                "username": "admin_bpjs",
+                "password": 123456
+            },
+            {
+                "username": "admin_test",
+                "password": 789012
+            }
+        ],
+        "ktpKk": [{
+                "nik": "3201012345670001",
+                "noKk": "0000000000000000",
+                "namaLengkap": "Ahmad Wijaya",
+                "tempatLahir": "Jakarta",
+                "tanggalLahir": "1990-01-15",
+                "jenisKelamin": "L",
+                "alamat": "Jl. Merdeka No. 123, RT 001, RW 005",
+                "agama": "Islam",
+                "statusPerkawinan": "Kawin",
+                "pekerjaan": "Pegawai Swasta",
+                "kewarganegaraan": "WNI"
+            },
+            {
+                "nik": "3201012345670002",
+                "noKk": "0000000000000000",
+                "namaLengkap": "Siti Nurhaliza",
+                "tempatLahir": "Bandung",
+                "tanggalLahir": "1992-03-20",
+                "jenisKelamin": "P",
+                "alamat": "Jl. Sudirman No. 456, RT 002, RW 003",
+                "agama": "Islam",
+                "statusPerkawinan": "Belum Kawin",
+                "pekerjaan": "Guru",
+                "kewarganegaraan": "WNI"
+            },
+            {
+                "nik": "3201012345670003",
+                "noKk": "0000000000000001",
+                "namaLengkap": "Rizki Pratama",
+                "tempatLahir": "Medan",
+                "tanggalLahir": "1993-09-05",
+                "jenisKelamin": "L",
+                "alamat": "Jl. Gatot Subroto No. 654, RT 005, RW 001",
+                "agama": "Islam",
+                "statusPerkawinan": "Cerai Hidup",
+                "pekerjaan": "Pegawai Negeri Sipil",
+                "kewarganegaraan": "WNI"
+            }
+        ],
+        "bpjs": [{
+                "nik": "3201012345670001",
+                "noBpjs": "0001234567890",
+                "faskesUtama": "RS Umum Daerah",
+                "kelasPerawatan": "KELAS I",
+                "statusPeserta": "AKTIF",
+                "tanggalDaftar": "2024-01-15"
+            },
+            {
+                "nik": "3201012345670002",
+                "noBpjs": "4787525670002",
+                "faskesUtama": "RS Siloam Bandung",
+                "kelasPerawatan": "KELAS II",
+                "statusPeserta": "AKTIF",
+                "tanggalDaftar": "2025-01-27"
+            },
+            {
+                "nik": "3201012345670003",
+                "noBpjs": "0816665670005",
+                "faskesUtama": "RSUD Kota Contoh",
+                "kelasPerawatan": "KELAS I",
+                "statusPeserta": "PENDING",
+                "tanggalDaftar": "2024-07-01"
+            }
+        ],
+        "pembayaranBpjs": [{
+                "idBpjs": 3,
+                "bulan": "Januari 2025",
+                "tahun": 2025,
+                "jumlah": 50000.00,
+                "statusPembayaran": "LUNAS",
+                "tanggalBayar": "2025-01-15"
+            },
+            {
+                "idBpjs": 4,
+                "bulan": "Februari 2025",
+                "tahun": 2025,
+                "jumlah": 50000.00,
+                "statusPembayaran": "BELUM LUNAS",
+                "tanggalBayar": null
+            },
+            {
+                "idBpjs": 5,
+                "bulan": "Maret 2025",
+                "tahun": 2025,
+                "jumlah": 50000.00,
+                "statusPembayaran": "LUNAS",
+                "tanggalBayar": "2025-03-15"
+            }
+        ],
+        "users": [{
+                "username": "admin_bpjs",
+                "password": "admin123",
+                "email": "admin@bpjs.com",
+                "phoneNumber": "08123456789",
+                "role": "ADMIN",
+                "nik": "3201012345670001",
+                "dateOfBirth": "2015-09-02"
+            },
+            {
+                "username": "user_test",
+                "password": "password123",
+                "email": "user@test.com",
+                "phoneNumber": "081234567890",
+                "role": "USER",
+                "nik": "3201012345670002",
+                "dateOfBirth": "1992-03-20"
+            },
+            {
+                "username": "user_baru",
+                "password": "password456",
+                "email": "userbaru@example.com",
+                "phoneNumber": "081234567891",
+                "role": "USER",
+                "nik": "3201012345670003",
+                "dateOfBirth": "1993-09-05"
+            }
+        ]
+    },
+    "testScenarios": {
+        "createOperations": [{
+                "endpoint": "POST /api/KtpKk",
+                "description": "Create new KTP/KK data",
+                "data": {
+                    "nik": "3201012345670004",
+                    "noKk": "0000000000000002",
+                    "namaLengkap": "Test User",
+                    "tempatLahir": "Surabaya",
+                    "tanggalLahir": "1995-05-10",
+                    "jenisKelamin": "L",
+                    "alamat": "Jl. Test No. 123",
+                    "agama": "Islam",
+                    "statusPerkawinan": "Belum Kawin",
+                    "pekerjaan": "Developer",
+                    "kewarganegaraan": "WNI"
+                }
+            },
+            {
+                "endpoint": "POST /api/Bpjs",
+                "description": "Create new BPJS data",
+                "data": {
+                    "nik": "3201012345670004",
+                    "noBpjs": "0001234567893",
+                    "faskesUtama": "RS Test",
+                    "kelasPerawatan": "KELAS III",
+                    "statusPeserta": "PENDING",
+                    "tanggalDaftar": "2025-01-30"
+                }
+            }
+        ],
+        "updateOperations": [{
+                "endpoint": "PUT /api/KtpKk/3201012345670004",
+                "description": "Update KTP/KK data",
+                "data": {
+                    "noKk": "0000000000000002",
+                    "namaLengkap": "Test User Updated",
+                    "tempatLahir": "Surabaya",
+                    "tanggalLahir": "1995-05-10",
+                    "jenisKelamin": "L",
+                    "alamat": "Jl. Test No. 123 Updated",
+                    "agama": "Islam",
+                    "statusPerkawinan": "Kawin",
+                    "pekerjaan": "Senior Developer",
+                    "kewarganegaraan": "WNI"
+                }
+            },
+            {
+                "endpoint": "PUT /api/Bpjs/6",
+                "description": "Update BPJS data",
+                "data": {
+                    "noBpjs": "0001234567893",
+                    "faskesUtama": "RS Test Updated",
+                    "kelasPerawatan": "KELAS II",
+                    "statusPeserta": "AKTIF",
+                    "tanggalDaftar": "2025-01-30"
+                }
+            }
+        ],
+        "deleteOperations": [{
+                "endpoint": "DELETE /api/Pembayaran/1",
+                "description": "Delete payment data",
+                "expectedResult": "Success"
+            },
+            {
+                "endpoint": "DELETE /api/Bpjs/6",
+                "description": "Delete BPJS data (after deleting payments)",
+                "expectedResult": "Success"
+            },
+            {
+                "endpoint": "DELETE /api/KtpKk/3201012345670004",
+                "description": "Delete KTP/KK data (after deleting BPJS)",
+                "expectedResult": "Success"
+            }
+        ],
+        "errorScenarios": [{
+                "endpoint": "POST /api/KtpKk",
+                "description": "Create KTP/KK with invalid NIK length",
+                "data": {
+                    "nik": "123",
+                    "noKk": "0000000000000000",
+                    "namaLengkap": "Test User"
+                },
+                "expectedError": "NIK must be exactly 16 characters"
+            },
+            {
+                "endpoint": "POST /api/Bpjs",
+                "description": "Create BPJS with invalid kelas perawatan",
+                "data": {
+                    "nik": "3201012345670001",
+                    "noBpjs": "0001234567894",
+                    "faskesUtama": "RS Test",
+                    "kelasPerawatan": "KELAS IV",
+                    "statusPeserta": "PENDING"
+                },
+                "expectedError": "Kelas Perawatan must be KELAS I, KELAS II, or KELAS III"
+            },
+            {
+                "endpoint": "DELETE /api/KtpKk/3201012345670001",
+                "description": "Delete KTP/KK with existing BPJS records",
+                "expectedError": "Cannot delete KTP/KK data with existing BPJS records"
+            }
+        ]
+    }
+}

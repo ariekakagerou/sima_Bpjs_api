@@ -1,0 +1,332 @@
+{
+    "users": [{
+            "username": "admin_bpjs",
+            "password": "admin123",
+            "nik": "3201012345670001",
+            "role": "ADMIN"
+        },
+        {
+            "username": "user_biasa",
+            "password": "user123",
+            "nik": "3201012345670002",
+            "role": "USER"
+        },
+        {
+            "username": "operator_bpjs",
+            "password": "operator123",
+            "nik": "3201012345670003",
+            "role": "USER"
+        }
+    ],
+    "ktp_kk": [{
+            "nik": "3201012345670001",
+            "noKk": "3201012345670001",
+            "namaLengkap": "Ahmad Wijaya",
+            "tempatLahir": "Jakarta",
+            "tanggalLahir": "1990-01-15T00:00:00",
+            "jenisKelamin": "L",
+            "alamat": "Jl. Merdeka No. 123, RT 001, RW 005, Jakarta Pusat",
+            "agama": "Islam",
+            "statusPerkawinan": "Kawin",
+            "pekerjaan": "Pegawai Swasta",
+            "kewarganegaraan": "WNI"
+        },
+        {
+            "nik": "3201012345670002",
+            "noKk": "3201012345670002",
+            "namaLengkap": "Siti Nurhaliza",
+            "tempatLahir": "Bandung",
+            "tanggalLahir": "1992-03-20T00:00:00",
+            "jenisKelamin": "P",
+            "alamat": "Jl. Sudirman No. 456, RT 002, RW 003, Bandung",
+            "agama": "Islam",
+            "statusPerkawinan": "Belum Kawin",
+            "pekerjaan": "Guru",
+            "kewarganegaraan": "WNI"
+        },
+        {
+            "nik": "3201012345670003",
+            "noKk": "3201012345670003",
+            "namaLengkap": "Budi Santoso",
+            "tempatLahir": "Surabaya",
+            "tanggalLahir": "1988-07-10T00:00:00",
+            "jenisKelamin": "L",
+            "alamat": "Jl. Pahlawan No. 789, RT 003, RW 007, Surabaya",
+            "agama": "Kristen",
+            "statusPerkawinan": "Kawin",
+            "pekerjaan": "Wiraswasta",
+            "kewarganegaraan": "WNI"
+        },
+        {
+            "nik": "3201012345670004",
+            "noKk": "3201012345670004",
+            "namaLengkap": "Dewi Lestari",
+            "tempatLahir": "Yogyakarta",
+            "tanggalLahir": "1995-11-25T00:00:00",
+            "jenisKelamin": "P",
+            "alamat": "Jl. Malioboro No. 321, RT 004, RW 002, Yogyakarta",
+            "agama": "Hindu",
+            "statusPerkawinan": "Belum Kawin",
+            "pekerjaan": "Mahasiswa",
+            "kewarganegaraan": "WNI"
+        },
+        {
+            "nik": "3201012345670005",
+            "noKk": "3201012345670005",
+            "namaLengkap": "Rizki Pratama",
+            "tempatLahir": "Medan",
+            "tanggalLahir": "1993-09-05T00:00:00",
+            "jenisKelamin": "L",
+            "alamat": "Jl. Gatot Subroto No. 654, RT 005, RW 001, Medan",
+            "agama": "Islam",
+            "statusPerkawinan": "Cerai Hidup",
+            "pekerjaan": "Pegawai Negeri Sipil",
+            "kewarganegaraan": "WNI"
+        }
+    ],
+    "bpjs_create": [{
+            "nik": "3201012345670001",
+            "faskesUtama": "RSUD Jakarta",
+            "kelasPerawatan": "KELAS I",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        },
+        {
+            "nik": "3201012345670002",
+            "faskesUtama": "RS Siloam",
+            "kelasPerawatan": "KELAS II",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        },
+        {
+            "nik": "3201012345670003",
+            "faskesUtama": "RS Cipto Mangunkusumo",
+            "kelasPerawatan": "KELAS III",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        },
+        {
+            "nik": "3201012345670004",
+            "faskesUtama": "RS Panti Rapih",
+            "kelasPerawatan": "KELAS I",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        },
+        {
+            "nik": "3201012345670005",
+            "faskesUtama": "RS Haji Adam Malik",
+            "kelasPerawatan": "KELAS II",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        }
+    ],
+    "pembayaran": [{
+            "idBpjs": 1,
+            "bulan": "Januari 2025",
+            "tahun": 2025,
+            "jumlah": 50000.00,
+            "statusPembayaran": "LUNAS",
+            "tanggalBayar": "2025-01-15T10:30:00.000Z"
+        },
+        {
+            "idBpjs": 1,
+            "bulan": "Februari 2025",
+            "tahun": 2025,
+            "jumlah": 50000.00,
+            "statusPembayaran": "BELUM LUNAS",
+            "tanggalBayar": null
+        },
+        {
+            "idBpjs": 2,
+            "bulan": "Januari 2025",
+            "tahun": 2025,
+            "jumlah": 40000.00,
+            "statusPembayaran": "LUNAS",
+            "tanggalBayar": "2025-01-20T14:15:00.000Z"
+        },
+        {
+            "idBpjs": 3,
+            "bulan": "Januari 2025",
+            "tahun": 2025,
+            "jumlah": 30000.00,
+            "statusPembayaran": "LUNAS",
+            "tanggalBayar": "2025-01-25T09:45:00.000Z"
+        },
+        {
+            "idBpjs": 4,
+            "bulan": "Januari 2025",
+            "tahun": 2025,
+            "jumlah": 50000.00,
+            "statusPembayaran": "LUNAS",
+            "tanggalBayar": "2025-01-10T16:20:00.000Z"
+        }
+    ],
+    "error_testing": {
+        "invalid_login": {
+            "username": "admin_bpjs",
+            "password": "wrong_password"
+        },
+        "duplicate_username": {
+            "username": "admin_bpjs",
+            "password": "admin123",
+            "nik": "3201012345670001",
+            "role": "ADMIN"
+        },
+        "invalid_bpjs_class": {
+            "nik": "3201012345670001",
+            "faskesUtama": "RSUD Jakarta",
+            "kelasPerawatan": "KELAS IV",
+            "tanggalDaftar": "2025-01-27T00:00:00"
+        },
+        "missing_required_fields": {
+            "username": "",
+            "password": ""
+        },
+        "invalid_nik_format": {
+            "nik": "123",
+            "noKk": "3201012345670001",
+            "namaLengkap": "Test User",
+            "tempatLahir": "Jakarta",
+            "tanggalLahir": "1990-01-15T00:00:00",
+            "jenisKelamin": "L",
+            "alamat": "Jl. Test No. 123",
+            "agama": "Islam",
+            "statusPerkawinan": "Belum Kawin",
+            "pekerjaan": "Test",
+            "kewarganegaraan": "WNI"
+        }
+    },
+    "swagger_examples": {
+        "auth_register": {
+            "summary": "Registrasi User Baru",
+            "description": "Endpoint untuk mendaftarkan user baru ke sistem",
+            "request_body": {
+                "username": "new_user",
+                "password": "password123",
+                "nik": "3201012345670001",
+                "role": "USER"
+            },
+            "responses": {
+                "201": "User berhasil didaftarkan",
+                "400": "Data tidak valid",
+                "409": "Username sudah digunakan"
+            }
+        },
+        "auth_login": {
+            "summary": "Login User",
+            "description": "Endpoint untuk login dan mendapatkan JWT token",
+            "request_body": {
+                "username": "new_user",
+                "password": "password123"
+            },
+            "responses": {
+                "200": "Login berhasil, token dikembalikan",
+                "401": "Kredensial tidak valid"
+            }
+        },
+        "bpjs_create": {
+            "summary": "Daftar BPJS Baru",
+            "description": "Endpoint untuk mendaftarkan peserta BPJS baru",
+            "request_body": {
+                "nik": "3201012345670001",
+                "faskesUtama": "RSUD Jakarta",
+                "kelasPerawatan": "KELAS I",
+                "tanggalDaftar": "2025-01-27T00:00:00"
+            },
+            "responses": {
+                "201": "Peserta BPJS berhasil didaftarkan",
+                "400": "Data tidak valid atau NIK tidak ditemukan",
+                "401": "Token tidak valid"
+            }
+        },
+        "bpjs_approve": {
+            "summary": "Setujui Peserta BPJS",
+            "description": "Endpoint untuk menyetujui peserta BPJS (Admin only)",
+            "responses": {
+                "200": "Peserta berhasil disetujui",
+                "401": "Token tidak valid",
+                "403": "Akses ditolak, role admin diperlukan",
+                "404": "Data tidak ditemukan"
+            }
+        }
+    },
+    "postman_environment": {
+        "name": "SIMA BPJS API",
+        "values": [{
+                "key": "base_url",
+                "value": "http://localhost:5189/api",
+                "enabled": true
+            },
+            {
+                "key": "token",
+                "value": "",
+                "enabled": true,
+                "description": "JWT token dari login"
+            },
+            {
+                "key": "admin_token",
+                "value": "",
+                "enabled": true,
+                "description": "JWT token admin untuk testing endpoint yang memerlukan role admin"
+            },
+            {
+                "key": "user_id",
+                "value": "",
+                "enabled": true,
+                "description": "ID user yang sedang login"
+            },
+            {
+                "key": "bpjs_id",
+                "value": "",
+                "enabled": true,
+                "description": "ID BPJS untuk testing"
+            }
+        ]
+    },
+    "testing_scenarios": {
+        "scenario_1_registration_and_login": [
+            "1. Test endpoint /Auth/test (tanpa auth)",
+            "2. Register user admin",
+            "3. Register user biasa",
+            "4. Login sebagai admin",
+            "5. Login sebagai user biasa",
+            "6. Login dengan kredensial salah"
+        ],
+        "scenario_2_ktp_kk_crud": [
+            "1. Create KTP/KK data",
+            "2. Get all KTP/KK",
+            "3. Get KTP/KK by NIK",
+            "4. Update KTP/KK data",
+            "5. Delete KTP/KK data"
+        ],
+        "scenario_3_bpjs_crud": [
+            "1. Create BPJS (akan auto-create KTP jika belum ada)",
+            "2. Get all BPJS",
+            "3. Get BPJS by ID",
+            "4. Update BPJS",
+            "5. Approve BPJS (sebagai admin)",
+            "6. Deactivate BPJS (sebagai admin)"
+        ],
+        "scenario_4_pembayaran_crud": [
+            "1. Create pembayaran",
+            "2. Get all pembayaran",
+            "3. Get pembayaran by ID",
+            "4. Update pembayaran",
+            "5. Delete pembayaran"
+        ],
+        "scenario_5_error_handling": [
+            "1. Test dengan token yang tidak valid",
+            "2. Test dengan role yang tidak sesuai",
+            "3. Test dengan data yang tidak valid",
+            "4. Test endpoint yang tidak ada",
+            "5. Test dengan field yang kosong"
+        ]
+    },
+    "external_ktp_api": {
+        "endpoint": "https://ktp.chasouluix.biz.id/api/ktp/all",
+        "description": "API eksternal untuk validasi data KTP",
+        "available_nik": [
+            "3201012345670001",
+            "3201012345670002",
+            "3201012345670003",
+            "3201012345670004",
+            "3201012345670005"
+        ],
+        "note": "Gunakan NIK yang tersedia di endpoint ini untuk testing yang valid"
+    }
+}

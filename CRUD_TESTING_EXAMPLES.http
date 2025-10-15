@@ -1,0 +1,296 @@
+### SIMA BPJS API - CRUD Testing Examples
+### Base URL: https://localhost:7000/api
+
+### 1. Authentication
+POST https://localhost:7000/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",
+  "password": "admin123"
+}
+
+### Save token for subsequent requests
+@token = {{login.response.body.token}}
+
+### 2. Admin Management
+
+### Get all admins
+GET https://localhost:7000/api/Admin
+Authorization: Bearer {{token}}
+
+### Get admin by ID
+GET https://localhost:7000/api/Admin/1
+Authorization: Bearer {{token}}
+
+### Create new admin
+POST https://localhost:7000/api/Admin
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "new_admin",
+  "password": 123456
+}
+
+### Update admin
+PUT https://localhost:7000/api/Admin/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "updated_admin",
+  "password": 654321
+}
+
+### Delete admin
+DELETE https://localhost:7000/api/Admin/2
+Authorization: Bearer {{token}}
+
+### 3. KTP/KK Management
+
+### Get all KTP/KK
+GET https://localhost:7000/api/KtpKk
+Authorization: Bearer {{token}}
+
+### Get KTP/KK by NIK
+GET https://localhost:7000/api/KtpKk/3201012345670001
+Authorization: Bearer {{token}}
+
+### Create new KTP/KK
+POST https://localhost:7000/api/KtpKk
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nik": "3201012345670003",
+  "noKk": "0000000000000001",
+  "namaLengkap": "Siti Nurhaliza",
+  "tempatLahir": "Bandung",
+  "tanggalLahir": "1992-03-20",
+  "jenisKelamin": "P",
+  "alamat": "Jl. Sudirman No. 456",
+  "agama": "Islam",
+  "statusPerkawinan": "Belum Kawin",
+  "pekerjaan": "Guru",
+  "kewarganegaraan": "WNI"
+}
+
+### Update KTP/KK
+PUT https://localhost:7000/api/KtpKk/3201012345670003
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "noKk": "0000000000000001",
+  "namaLengkap": "Siti Nurhaliza Updated",
+  "tempatLahir": "Bandung",
+  "tanggalLahir": "1992-03-20",
+  "jenisKelamin": "P",
+  "alamat": "Jl. Sudirman No. 456 Updated",
+  "agama": "Islam",
+  "statusPerkawinan": "Kawin",
+  "pekerjaan": "Guru",
+  "kewarganegaraan": "WNI"
+}
+
+### Delete KTP/KK (will fail if has BPJS records)
+DELETE https://localhost:7000/api/KtpKk/3201012345670003
+Authorization: Bearer {{token}}
+
+### 4. BPJS Management
+
+### Get all BPJS
+GET https://localhost:7000/api/Bpjs
+Authorization: Bearer {{token}}
+
+### Get BPJS by ID
+GET https://localhost:7000/api/Bpjs/3
+Authorization: Bearer {{token}}
+
+### Create new BPJS
+POST https://localhost:7000/api/Bpjs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nik": "3201012345670003",
+  "noBpjs": "0001234567891",
+  "faskesUtama": "RS Siloam Bandung",
+  "kelasPerawatan": "KELAS II",
+  "statusPeserta": "PENDING",
+  "tanggalDaftar": "2025-01-27"
+}
+
+### Update BPJS
+PUT https://localhost:7000/api/Bpjs/6
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "noBpjs": "0001234567891",
+  "faskesUtama": "RS Siloam Bandung Updated",
+  "kelasPerawatan": "KELAS I",
+  "statusPeserta": "AKTIF",
+  "tanggalDaftar": "2025-01-27"
+}
+
+### Approve BPJS participant
+POST https://localhost:7000/api/Bpjs/6/approve
+Authorization: Bearer {{token}}
+
+### Deactivate BPJS participant
+POST https://localhost:7000/api/Bpjs/6/deactivate
+Authorization: Bearer {{token}}
+
+### Delete BPJS (will fail if has payment records)
+DELETE https://localhost:7000/api/Bpjs/6
+Authorization: Bearer {{token}}
+
+### 5. Payment Management
+
+### Get all payments
+GET https://localhost:7000/api/Pembayaran
+Authorization: Bearer {{token}}
+
+### Get payment by ID
+GET https://localhost:7000/api/Pembayaran/1
+Authorization: Bearer {{token}}
+
+### Create new payment
+POST https://localhost:7000/api/Pembayaran
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "idBpjs": 3,
+  "bulan": "Februari 2025",
+  "tahun": 2025,
+  "jumlah": 50000.00,
+  "statusPembayaran": "BELUM LUNAS",
+  "tanggalBayar": null
+}
+
+### Update payment
+PUT https://localhost:7000/api/Pembayaran/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "bulan": "Februari 2025",
+  "tahun": 2025,
+  "jumlah": 50000.00,
+  "statusPembayaran": "LUNAS",
+  "tanggalBayar": "2025-02-15"
+}
+
+### Delete payment
+DELETE https://localhost:7000/api/Pembayaran/1
+Authorization: Bearer {{token}}
+
+### 6. User Management
+
+### Get all users (Admin only)
+GET https://localhost:7000/api/User
+Authorization: Bearer {{token}}
+
+### Get user by ID
+GET https://localhost:7000/api/User/1
+Authorization: Bearer {{token}}
+
+### Create new user (Admin only)
+POST https://localhost:7000/api/User
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "new_user",
+  "password": "password123",
+  "email": "user@example.com",
+  "phoneNumber": "081234567890",
+  "role": "USER",
+  "nik": "3201012345670006",
+  "dateOfBirth": "1990-01-01"
+}
+
+### Update user
+PUT https://localhost:7000/api/User/6
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "updated_user",
+  "email": "updated@example.com",
+  "phoneNumber": "081234567890",
+  "role": "USER",
+  "nik": "3201012345670006",
+  "dateOfBirth": "1990-01-01"
+}
+
+### Update user password
+PUT https://localhost:7000/api/User/6/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "password123",
+  "newPassword": "newpassword123"
+}
+
+### Delete user (Admin only, will fail if has BPJS records)
+DELETE https://localhost:7000/api/User/6
+Authorization: Bearer {{token}}
+
+### 7. Error Testing Examples
+
+### Test validation error
+POST https://localhost:7000/api/KtpKk
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nik": "123",  // Invalid: should be 16 characters
+  "noKk": "0000000000000000",
+  "namaLengkap": "Test User"
+}
+
+### Test conflict error (duplicate username)
+POST https://localhost:7000/api/User
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",  // Already exists
+  "password": "password123",
+  "role": "USER"
+}
+
+### Test not found error
+GET https://localhost:7000/api/Bpjs/999
+Authorization: Bearer {{token}}
+
+### Test unauthorized access (without token)
+GET https://localhost:7000/api/Admin
+
+### Test forbidden access (USER trying to access ADMIN endpoint)
+GET https://localhost:7000/api/Admin
+Authorization: Bearer {{user_token}}
+
+### Test cascade delete protection
+DELETE https://localhost:7000/api/KtpKk/3201012345670001
+Authorization: Bearer {{token}}
+# Should return error: Cannot delete KTP/KK data with existing BPJS records
+
+### Test business rule validation
+POST https://localhost:7000/api/Bpjs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nik": "9999999999999999",  // Non-existent NIK
+  "noBpjs": "0001234567892",
+  "faskesUtama": "RS Test",
+  "kelasPerawatan": "KELAS I",
+  "statusPeserta": "PENDING"
+}
+# Should return error: NIK not found in external KTP service

@@ -1,0 +1,205 @@
+@sima_Bpjs_api_HostAddress = http://localhost:5189
+
+### ===== KTP/KK CRUD Operations =====
+
+# GET - Ambil semua data KTP/KK
+GET {{sima_Bpjs_api_HostAddress}}/api/KtpKk
+Accept: application/json
+
+###
+
+# GET - Ambil data KTP/KK berdasarkan NIK
+GET {{sima_Bpjs_api_HostAddress}}/api/KtpKk/1234567890123456
+Accept: application/json
+
+###
+
+# POST - Buat data KTP/KK baru
+POST {{sima_Bpjs_api_HostAddress}}/api/KtpKk
+Content-Type: application/json
+
+{
+  "nik": "1234567890123456",
+  "noKk": "1234567890123456",
+  "namaLengkap": "John Doe",
+  "tempatLahir": "Jakarta",
+  "tanggalLahir": "1990-01-01",
+  "jenisKelamin": "L",
+  "alamat": "Jl. Contoh No. 123",
+  "agama": "Islam",
+  "statusPerkawinan": "Belum Kawin",
+  "pekerjaan": "Karyawan",
+  "kewarganegaraan": "WNI"
+}
+
+###
+
+# PUT - Update data KTP/KK
+PUT {{sima_Bpjs_api_HostAddress}}/api/KtpKk/1234567890123456
+Content-Type: application/json
+
+{
+  "nik": "1234567890123456",
+  "noKk": "1234567890123456",
+  "namaLengkap": "John Doe Updated",
+  "tempatLahir": "Jakarta",
+  "tanggalLahir": "1990-01-01",
+  "jenisKelamin": "L",
+  "alamat": "Jl. Contoh No. 456",
+  "agama": "Islam",
+  "statusPerkawinan": "Kawin",
+  "pekerjaan": "Manager",
+  "kewarganegaraan": "WNI"
+}
+
+###
+
+# DELETE - Hapus data KTP/KK
+DELETE {{sima_Bpjs_api_HostAddress}}/api/KtpKk/1234567890123456
+
+###
+
+### ===== BPJS CRUD Operations =====
+
+# GET - Ambil semua data BPJS
+GET {{sima_Bpjs_api_HostAddress}}/api/Bpjs
+Accept: application/json
+
+###
+
+# GET - Ambil data BPJS berdasarkan ID
+GET {{sima_Bpjs_api_HostAddress}}/api/Bpjs/1
+Accept: application/json
+
+###
+
+# POST - Buat data BPJS baru (noBpjs otomatis, status awal PENDING)
+POST {{sima_Bpjs_api_HostAddress}}/api/Bpjs
+Content-Type: application/json
+
+{
+  "nik": "1234567890123456",
+  "faskesUtama": "RS Umum Daerah",
+  "kelasPerawatan": "KELAS I",
+  "tanggalDaftar": "2024-01-01"
+}
+
+###
+
+# PUT - Update data BPJS
+PUT {{sima_Bpjs_api_HostAddress}}/api/Bpjs/1
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "nik": "1234567890123456",
+  "faskesUtama": "RS Umum Daerah",
+  "kelasPerawatan": "KELAS II",
+  "tanggalDaftar": "2024-01-01"
+}
+
+###
+
+# DELETE - Hapus data BPJS
+DELETE {{sima_Bpjs_api_HostAddress}}/api/Bpjs/1
+
+###
+
+### ===== PEMBAYARAN CRUD Operations =====
+
+# GET - Ambil semua data pembayaran
+GET {{sima_Bpjs_api_HostAddress}}/api/Pembayaran
+Accept: application/json
+
+###
+
+# GET - Ambil data pembayaran berdasarkan ID
+GET {{sima_Bpjs_api_HostAddress}}/api/Pembayaran/1
+Accept: application/json
+
+###
+
+# POST - Buat data pembayaran baru
+POST {{sima_Bpjs_api_HostAddress}}/api/Pembayaran
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "bulan": "Januari 2025",
+  "tahun": 2025,
+  "jumlah": 50000,
+  "statusPembayaran": "LUNAS",
+  "tanggalBayar": "2025-01-15"
+}
+
+###
+
+# PUT - Update data pembayaran
+PUT {{sima_Bpjs_api_HostAddress}}/api/Pembayaran/1
+Content-Type: application/json
+
+{
+  "idPembayaran": 1,
+  "idBpjs": 1,
+  "bulan": "Januari 2025",
+  "tahun": 2025,
+  "jumlah": 50000,
+  "statusPembayaran": "BELUM LUNAS",
+  "tanggalBayar": null
+}
+
+###
+
+# DELETE - Hapus data pembayaran
+DELETE {{sima_Bpjs_api_HostAddress}}/api/Pembayaran/1
+
+###
+
+### ===== AUTH =====
+
+# GET - Test API
+GET {{sima_Bpjs_api_HostAddress}}/api/Auth/test
+Accept: application/json
+
+###
+
+# POST - Register user baru
+POST {{sima_Bpjs_api_HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "userdemo",
+  "password": "P@ssw0rd!",
+  "nik": "1234567890123456",
+  "role": "USER"
+}
+
+###
+
+# POST - Login (dapatkan JWT)
+POST {{sima_Bpjs_api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "userdemo",
+  "password": "P@ssw0rd!"
+}
+
+###
+
+# Contoh penggunaan Bearer Token untuk endpoint terproteksi
+GET {{sima_Bpjs_api_HostAddress}}/api/Bpjs
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### ===== ADMIN ACTIONS (butuh role ADMIN) =====
+
+# Approve peserta BPJS -> AKTIF
+POST {{sima_Bpjs_api_HostAddress}}/api/Bpjs/1/approve
+Authorization: Bearer {{token}}
+
+###
+
+# Nonaktifkan peserta BPJS -> NONAKTIF
+POST {{sima_Bpjs_api_HostAddress}}/api/Bpjs/1/deactivate
+Authorization: Bearer {{token}}

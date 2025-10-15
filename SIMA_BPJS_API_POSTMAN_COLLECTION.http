@@ -1,0 +1,463 @@
+### SIMA BPJS API - Postman Collection
+### Base URL: http://localhost:5189/api
+
+### 1. TEST API (Tidak Perlu Auth)
+GET http://localhost:5189/api/Auth/test
+
+###
+
+### 2. REGISTER USER
+POST http://localhost:5189/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",
+  "password": "admin123",
+  "nik": "3201012345670001",
+  "role": "ADMIN"
+}
+
+###
+
+### 3. REGISTER USER BIASA
+POST http://localhost:5189/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "user_biasa",
+  "password": "user123",
+  "nik": "3201012345670002",
+  "role": "USER"
+}
+
+###
+
+### 4. LOGIN ADMIN
+POST http://localhost:5189/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",
+  "password": "admin123"
+}
+
+###
+
+### 5. LOGIN USER BIASA
+POST http://localhost:5189/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "user_biasa",
+  "password": "user123"
+}
+
+###
+
+### 6. CREATE ADMIN (Development Only)
+POST http://localhost:5189/api/Auth/create-admin
+Content-Type: application/json
+
+{
+  "username": "admin2",
+  "password": "admin123",
+  "nik": "3201012345670002",
+  "secretKey": "ADMIN_SECRET_KEY_2025"
+}
+
+###
+
+### 6. GET ALL KTP/KK (Perlu Auth)
+GET http://localhost:5189/api/KtpKk
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 7. GET KTP/KK BY NIK (Perlu Auth)
+GET http://localhost:5189/api/KtpKk/3201012345670001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 8. CREATE KTP/KK (Perlu Auth)
+POST http://localhost:5189/api/KtpKk
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670001",
+  "noKk": "3201012345670001",
+  "namaLengkap": "Ahmad Wijaya",
+  "tempatLahir": "Jakarta",
+  "tanggalLahir": "1990-01-15T00:00:00",
+  "jenisKelamin": "L",
+  "alamat": "Jl. Merdeka No. 123, Jakarta Pusat",
+  "agama": "Islam",
+  "statusPerkawinan": "Kawin",
+  "pekerjaan": "Pegawai Swasta",
+  "kewarganegaraan": "WNI"
+}
+
+###
+
+### 9. CREATE KTP/KK KEDUA (Perlu Auth)
+POST http://localhost:5189/api/KtpKk
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670002",
+  "noKk": "3201012345670002",
+  "namaLengkap": "Siti Nurhaliza",
+  "tempatLahir": "Bandung",
+  "tanggalLahir": "1992-05-20T00:00:00",
+  "jenisKelamin": "P",
+  "alamat": "Jl. Sudirman No. 456, RT 002, RW 003, Bandung",
+  "agama": "Islam",
+  "statusPerkawinan": "Kawin",
+  "pekerjaan": "Guru",
+  "kewarganegaraan": "WNI"
+}
+
+###
+
+### 10. UPDATE KTP/KK (Perlu Auth)
+PUT http://localhost:5189/api/KtpKk/3201012345670001
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670001",
+  "noKk": "3201012345670001",
+  "namaLengkap": "John Doe Updated",
+  "tempatLahir": "Jakarta",
+  "tanggalLahir": "1990-01-15T00:00:00",
+  "jenisKelamin": "L",
+  "alamat": "Jl. Merdeka No. 123, Jakarta Pusat",
+  "agama": "Islam",
+  "statusPerkawinan": "Kawin",
+  "pekerjaan": "Manager",
+  "kewarganegaraan": "WNI"
+}
+
+###
+
+### 11. DELETE KTP/KK (Perlu Auth)
+DELETE http://localhost:5189/api/KtpKk/3201012345670001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 12. GET ALL BPJS (Perlu Auth)
+GET http://localhost:5189/api/Bpjs
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 13. GET BPJS BY ID (Perlu Auth)
+GET http://localhost:5189/api/Bpjs/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 14. CREATE BPJS - KELAS I (Perlu Auth)
+POST http://localhost:5189/api/Bpjs
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670001",
+  "faskesUtama": "RSUD Jakarta",
+  "kelasPerawatan": "KELAS I",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 15. CREATE BPJS - KELAS II (Perlu Auth)
+POST http://localhost:5189/api/Bpjs
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670002",
+  "faskesUtama": "RS Siloam",
+  "kelasPerawatan": "KELAS II",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 16. CREATE BPJS - KELAS III (Perlu Auth)
+POST http://localhost:5189/api/Bpjs
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670003",
+  "faskesUtama": "RS Cipto Mangunkusumo",
+  "kelasPerawatan": "KELAS III",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 17. UPDATE BPJS (Perlu Auth)
+PUT http://localhost:5189/api/Bpjs/1
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "nik": "3201012345670001",
+  "noBpjs": "1234567890123",
+  "faskesUtama": "RSUD Jakarta Updated",
+  "kelasPerawatan": "KELAS I",
+  "statusPeserta": "PENDING",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 18. APPROVE BPJS (Admin Only)
+POST http://localhost:5189/api/Bpjs/1/approve
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### 19. DEACTIVATE BPJS (Admin Only)
+POST http://localhost:5189/api/Bpjs/1/deactivate
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### 20. APPROVE BPJS ID 4 (Admin Only)
+POST http://localhost:5189/api/Bpjs/4/approve
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### 21. DEACTIVATE BPJS ID 4 (Admin Only)
+POST http://localhost:5189/api/Bpjs/4/deactivate
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### 20. DELETE BPJS (Perlu Auth)
+DELETE http://localhost:5189/api/Bpjs/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 21. GET ALL PEMBAYARAN (Perlu Auth)
+GET http://localhost:5189/api/Pembayaran
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 22. GET PEMBAYARAN BY ID (Perlu Auth)
+GET http://localhost:5189/api/Pembayaran/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 23. CREATE PEMBAYARAN - LUNAS (Perlu Auth)
+POST http://localhost:5189/api/Pembayaran
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "bulan": "Januari 2025",
+  "tahun": 2025,
+  "jumlah": 50000.00,
+  "statusPembayaran": "LUNAS",
+  "tanggalBayar": "2025-01-15T10:30:00.000Z"
+}
+
+###
+
+### 24. CREATE PEMBAYARAN - BELUM LUNAS (Perlu Auth)
+POST http://localhost:5189/api/Pembayaran
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "bulan": "Februari 2025",
+  "tahun": 2025,
+  "jumlah": 50000.00,
+  "statusPembayaran": "BELUM LUNAS",
+  "tanggalBayar": null
+}
+
+###
+
+### 25. CREATE PEMBAYARAN BULAN MARET (Perlu Auth)
+POST http://localhost:5189/api/Pembayaran
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idBpjs": 1,
+  "bulan": "Maret 2025",
+  "tahun": 2025,
+  "jumlah": 50000.00,
+  "statusPembayaran": "LUNAS",
+  "tanggalBayar": "2025-03-10T14:20:00.000Z"
+}
+
+###
+
+### 26. UPDATE PEMBAYARAN (Perlu Auth)
+PUT http://localhost:5189/api/Pembayaran/1
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idPembayaran": 1,
+  "idBpjs": 1,
+  "bulan": "Januari 2025",
+  "tahun": 2025,
+  "jumlah": 55000.00,
+  "statusPembayaran": "LUNAS",
+  "tanggalBayar": "2025-01-15T10:30:00.000Z"
+}
+
+###
+
+### 27. DELETE PEMBAYARAN (Perlu Auth)
+DELETE http://localhost:5189/api/Pembayaran/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 28. TEST ERROR - LOGIN DENGAN PASSWORD SALAH
+POST http://localhost:5189/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",
+  "password": "wrong_password"
+}
+
+###
+
+### 29. TEST ERROR - REGISTER DENGAN USERNAME YANG SUDAH ADA
+POST http://localhost:5189/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "admin_bpjs",
+  "password": "admin123",
+  "nik": "3201012345670001",
+  "role": "ADMIN"
+}
+
+###
+
+### 30. TEST ERROR - REGISTER SEBAGAI ADMIN (HARUS ERROR)
+POST http://localhost:5189/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "test_admin",
+  "password": "test123",
+  "nik": "3201012345670001",
+  "role": "ADMIN"
+}
+
+###
+
+### 30. TEST ERROR - CREATE BPJS DENGAN KELAS TIDAK VALID
+POST http://localhost:5189/api/Bpjs
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "nik": "3201012345670001",
+  "faskesUtama": "RSUD Jakarta",
+  "kelasPerawatan": "KELAS IV",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 31. TEST ERROR - ACCESS ENDPOINT TANPA TOKEN
+GET http://localhost:5189/api/Bpjs
+
+###
+
+### 32. TEST ERROR - ACCESS ADMIN ENDPOINT DENGAN USER ROLE
+POST http://localhost:5189/api/Bpjs/1/approve
+Authorization: Bearer YOUR_USER_TOKEN_HERE
+
+###
+
+### 33. TEST ERROR - ACCESS ADMIN ENDPOINT TANPA TOKEN
+POST http://localhost:5189/api/Bpjs/1/approve
+
+###
+
+### 34. TEST ERROR - CREATE ADMIN DENGAN SECRET KEY SALAH
+POST http://localhost:5189/api/Auth/create-admin
+Content-Type: application/json
+
+{
+  "username": "admin3",
+  "password": "admin123",
+  "nik": "3201012345670003",
+  "secretKey": "WRONG_SECRET_KEY"
+}
+
+###
+
+### 33. TEST ERROR - GET DATA YANG TIDAK ADA
+GET http://localhost:5189/api/Bpjs/999
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### 34. TEST ERROR - UPDATE DENGAN ID YANG TIDAK SESUAI
+PUT http://localhost:5189/api/Bpjs/1
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "idBpjs": 2,
+  "nik": "3201012345670001",
+  "noBpjs": "1234567890123",
+  "faskesUtama": "RSUD Jakarta",
+  "kelasPerawatan": "KELAS I",
+  "statusPeserta": "PENDING",
+  "tanggalDaftar": "2025-01-27T00:00:00"
+}
+
+###
+
+### 35. TEST ERROR - DELETE DATA YANG TIDAK ADA
+DELETE http://localhost:5189/api/Bpjs/999
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### CATATAN PENTING:
+### 1. Ganti YOUR_TOKEN_HERE dengan token JWT yang didapat dari login
+### 2. Ganti YOUR_ADMIN_TOKEN_HERE dengan token admin untuk endpoint yang memerlukan role ADMIN
+### 3. Ganti YOUR_USER_TOKEN_HERE dengan token user biasa untuk testing error handling
+### 4. Pastikan database sudah terhubung dan tabel sudah dibuat
+### 5. Untuk testing yang lebih lengkap, jalankan request secara berurutan sesuai skenario
+
+### ADMIN SETUP:
+### 1. Admin otomatis dibuat saat aplikasi start: admin_bpjs / admin123
+### 2. User tidak bisa registrasi sebagai admin (akan error)
+### 3. Admin hanya bisa dibuat melalui endpoint create-admin (development only)
+### 4. Secret key untuk create-admin: ADMIN_SECRET_KEY_2025
+### 5. Admin bisa approve/deactivate BPJS peserta
+
+### TESTING FLOW:
+### 1. Login admin → Get token
+### 2. Set token di environment
+### 3. Test admin functions (approve/deactivate)
+### 4. Test error cases (register admin, access tanpa token)
+### 5. Test user functions (register, login, CRUD data)
