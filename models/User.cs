@@ -44,6 +44,16 @@ namespace sima_bpjs_api.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // ✅ SECURITY ENHANCEMENT: Account Lockout
+        [Column("failed_login_attempts")]
+        public int FailedLoginAttempts { get; set; } = 0;
+
+        [Column("lockout_end")]
+        public DateTime? LockoutEnd { get; set; }
+
+        [NotMapped]
+        public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value > DateTime.UtcNow;
     }
 }
 

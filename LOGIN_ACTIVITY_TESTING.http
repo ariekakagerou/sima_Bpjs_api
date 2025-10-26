@@ -1,0 +1,238 @@
+### LOGIN ACTIVITY API TESTING
+### Base URL: http://localhost:5189/api/LoginActivity
+
+### ==========================================
+### SETUP: Variables
+@baseUrl = http://localhost:5189
+@adminToken = YOUR_ADMIN_JWT_TOKEN_HERE
+@userToken = YOUR_USER_JWT_TOKEN_HERE
+
+### ==========================================
+### 1. Get My Login Activities (Current User)
+### Auth: Required (User or Admin)
+### Deskripsi: Mendapatkan riwayat login untuk user yang sedang login
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=10
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 2. Get All Login Activities (Admin Only)
+### Auth: Required (Admin only)
+### Deskripsi: Mendapatkan semua riwayat login dari semua user
+
+GET {{baseUrl}}/api/LoginActivity?page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 3. Get All Login Activities - Page 2 (Admin Only)
+
+GET {{baseUrl}}/api/LoginActivity?page=2&limit=5
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 4. Get Login Activities by Username (Admin Only)
+### Auth: Required (Admin only)
+### Deskripsi: Mendapatkan riwayat login untuk username tertentu
+
+GET {{baseUrl}}/api/LoginActivity/user/admin_bpjs?limit=10
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 5. Create Login Activity (Internal Use)
+### Auth: Not required (AllowAnonymous)
+### Deskripsi: Mencatat aktivitas login (biasanya dipanggil oleh AuthController)
+
+POST {{baseUrl}}/api/LoginActivity
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "username": "admin_bpjs",
+  "ipAddress": "192.168.1.100",
+  "device": "Windows 10",
+  "browser": "Chrome",
+  "status": "BERHASIL"
+}
+
+### ==========================================
+### 6. Create Failed Login Activity
+
+POST {{baseUrl}}/api/LoginActivity
+Content-Type: application/json
+
+{
+  "userId": null,
+  "username": "failed_user",
+  "ipAddress": "192.168.1.200",
+  "device": "Windows 10",
+  "browser": "Firefox",
+  "status": "GAGAL"
+}
+
+### ==========================================
+### 7. Delete Login Activity by ID (Admin Only)
+### Auth: Required (Admin only)
+### Deskripsi: Menghapus record aktivitas login tertentu
+
+DELETE {{baseUrl}}/api/LoginActivity/1
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 8. Clear Old Login Activities (Admin Only)
+### Auth: Required (Admin only)
+### Deskripsi: Menghapus aktivitas login yang lebih lama dari 30 hari
+
+DELETE {{baseUrl}}/api/LoginActivity/clear-old?daysOld=30
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 9. Clear Old Login Activities - 60 Days (Admin Only)
+
+DELETE {{baseUrl}}/api/LoginActivity/clear-old?daysOld=60
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 10. Clear Old Login Activities - 90 Days (Admin Only)
+
+DELETE {{baseUrl}}/api/LoginActivity/clear-old?daysOld=90
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### ERROR TESTING
+### ==========================================
+
+### 11. Get My Activities - No Token (Should return 401)
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=10
+
+### ==========================================
+### 12. Get All Activities - User Token (Should return 403)
+### User tidak punya akses ke endpoint admin
+
+GET {{baseUrl}}/api/LoginActivity?page=1&limit=10
+Authorization: Bearer {{userToken}}
+
+### ==========================================
+### 13. Get Activities by Username - User Token (Should return 403)
+
+GET {{baseUrl}}/api/LoginActivity/user/admin_bpjs?limit=10
+Authorization: Bearer {{userToken}}
+
+### ==========================================
+### 14. Delete Activity - No Token (Should return 401)
+
+DELETE {{baseUrl}}/api/LoginActivity/1
+
+### ==========================================
+### 15. Delete Activity - User Token (Should return 403)
+
+DELETE {{baseUrl}}/api/LoginActivity/1
+Authorization: Bearer {{userToken}}
+
+### ==========================================
+### 16. Get Non-Existent User Activities (Should return empty array)
+
+GET {{baseUrl}}/api/LoginActivity/user/nonexistent_user?limit=10
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### INTEGRATION TESTING
+### ==========================================
+
+### 17. Complete Login Flow Test
+### Step 1: Login sebagai admin
+
+POST {{baseUrl}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "emailOrPhone": "admin_bpjs",
+  "password": "admin123"
+}
+
+### Step 2: Setelah login, cek aktivitas login terbaru
+### (Gunakan token dari response Step 1)
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=1
+Authorization: Bearer YOUR_TOKEN_FROM_STEP_1
+
+### ==========================================
+### PERFORMANCE TESTING
+### ==========================================
+
+### 18. Get Large Dataset (Admin Only)
+
+GET {{baseUrl}}/api/LoginActivity?page=1&limit=100
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 19. Get All Data Without Pagination
+
+GET {{baseUrl}}/api/LoginActivity?page=1&limit=1000
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### EDGE CASES
+### ==========================================
+
+### 20. Get Activities with Limit 0
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=0
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 21. Get Activities with Negative Limit
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=-5
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 22. Get Activities with Very Large Limit
+
+GET {{baseUrl}}/api/LoginActivity/my-activities?limit=99999
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 23. Get Activities with Invalid Page
+
+GET {{baseUrl}}/api/LoginActivity?page=0&limit=10
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### 24. Create Activity with Empty Username (Should fail)
+
+POST {{baseUrl}}/api/LoginActivity
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "username": "",
+  "ipAddress": "192.168.1.100",
+  "device": "Windows 10",
+  "browser": "Chrome",
+  "status": "BERHASIL"
+}
+
+### ==========================================
+### 25. Create Activity with Invalid Status
+
+POST {{baseUrl}}/api/LoginActivity
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "username": "test_user",
+  "ipAddress": "192.168.1.100",
+  "device": "Windows 10",
+  "browser": "Chrome",
+  "status": "INVALID_STATUS"
+}
+
+### ==========================================
+### NOTES:
+### 1. Replace {{adminToken}} with actual admin JWT token
+### 2. Replace {{userToken}} with actual user JWT token
+### 3. Some tests require data to exist in database
+### 4. Run tests sequentially for integration testing
+### 5. Clear old activities periodically for maintenance
+
