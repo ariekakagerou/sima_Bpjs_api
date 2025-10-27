@@ -1,0 +1,237 @@
+{
+    "test_users": [{
+            "name": "John Doe",
+            "register": {
+                "username": "john_doe",
+                "password": "SecurePass@2024!",
+                "email": "john.doe@example.com",
+                "phoneNumber": "081234567890",
+                "dateOfBirth": "1995-05-15",
+                "nik": "3201011505950001"
+            },
+            "login_email": {
+                "emailOrPhone": "john.doe@example.com",
+                "password": "SecurePass@2024!"
+            },
+            "login_phone": {
+                "emailOrPhone": "081234567890",
+                "password": "SecurePass@2024!"
+            },
+            "login_username": {
+                "emailOrPhone": "john_doe",
+                "password": "SecurePass@2024!"
+            }
+        },
+        {
+            "name": "Jane Smith",
+            "register": {
+                "username": "jane_smith",
+                "password": "MyStrong@Pass123",
+                "email": "jane.smith@example.com",
+                "phoneNumber": "082345678901",
+                "dateOfBirth": "1998-08-20",
+                "nik": "3201012008980002"
+            },
+            "login_email": {
+                "emailOrPhone": "jane.smith@example.com",
+                "password": "MyStrong@Pass123"
+            },
+            "login_phone": {
+                "emailOrPhone": "082345678901",
+                "password": "MyStrong@Pass123"
+            },
+            "login_username": {
+                "emailOrPhone": "jane_smith",
+                "password": "MyStrong@Pass123"
+            }
+        },
+        {
+            "name": "Ahmad Budiman",
+            "register": {
+                "username": "ahmad_budiman",
+                "password": "Ahmad@Bpjs2024!",
+                "email": "ahmad.budiman@email.com",
+                "phoneNumber": "083456789012",
+                "dateOfBirth": "1990-12-10",
+                "nik": "3201011012900003"
+            },
+            "login_email": {
+                "emailOrPhone": "ahmad.budiman@email.com",
+                "password": "Ahmad@Bpjs2024!"
+            },
+            "login_phone": {
+                "emailOrPhone": "083456789012",
+                "password": "Ahmad@Bpjs2024!"
+            },
+            "login_username": {
+                "emailOrPhone": "ahmad_budiman",
+                "password": "Ahmad@Bpjs2024!"
+            }
+        },
+        {
+            "name": "Siti Nurhaliza",
+            "register": {
+                "username": "siti_nurhaliza",
+                "password": "Siti@Secure2024",
+                "email": "siti.nurhaliza@gmail.com",
+                "phoneNumber": "084567890123",
+                "dateOfBirth": "1992-03-25",
+                "nik": "3201012503920004"
+            },
+            "login_email": {
+                "emailOrPhone": "siti.nurhaliza@gmail.com",
+                "password": "Siti@Secure2024"
+            },
+            "login_phone": {
+                "emailOrPhone": "084567890123",
+                "password": "Siti@Secure2024"
+            },
+            "login_username": {
+                "emailOrPhone": "siti_nurhaliza",
+                "password": "Siti@Secure2024"
+            }
+        },
+        {
+            "name": "Budi Santoso",
+            "register": {
+                "username": "budi_santoso",
+                "password": "Budi@Pass2024!",
+                "email": "budi.santoso@yahoo.com",
+                "phoneNumber": "085678901234",
+                "dateOfBirth": "1988-07-08",
+                "nik": "3201010807880005"
+            },
+            "login_email": {
+                "emailOrPhone": "budi.santoso@yahoo.com",
+                "password": "Budi@Pass2024!"
+            },
+            "login_phone": {
+                "emailOrPhone": "085678901234",
+                "password": "Budi@Pass2024!"
+            },
+            "login_username": {
+                "emailOrPhone": "budi_santoso",
+                "password": "Budi@Pass2024!"
+            }
+        }
+    ],
+    "quick_test_user": {
+        "register": {
+            "username": "test_user",
+            "password": "TestUser@2024!",
+            "email": "test.user@example.com",
+            "phoneNumber": "081234567999",
+            "dateOfBirth": "2000-01-01",
+            "nik": "3201010101000099"
+        },
+        "login": {
+            "emailOrPhone": "test.user@example.com",
+            "password": "TestUser@2024!"
+        }
+    },
+    "testing_scenarios": {
+        "weak_password_test": {
+            "register": {
+                "username": "weak_pass_user",
+                "password": "weak",
+                "email": "weak@test.com",
+                "phoneNumber": "081999999991"
+            },
+            "expected_error": "Password minimal 8 karakter"
+        },
+        "wrong_password_test": {
+            "register": {
+                "username": "test_wrong_pass",
+                "password": "Correct@Pass2024",
+                "email": "wrongpass@test.com",
+                "phoneNumber": "081999999992",
+                "nik": "3201010101000992"
+            },
+            "login_wrong": {
+                "emailOrPhone": "wrongpass@test.com",
+                "password": "WrongPassword123!"
+            },
+            "note": "Try 5 times to trigger account lockout"
+        },
+        "duplicate_username_test": {
+            "first_user": {
+                "username": "duplicate_user",
+                "password": "First@User2024",
+                "email": "first@test.com",
+                "phoneNumber": "081999999993",
+                "nik": "3201010101000993"
+            },
+            "second_user": {
+                "username": "duplicate_user",
+                "password": "Second@User2024",
+                "email": "second@test.com",
+                "phoneNumber": "081999999994",
+                "nik": "3201010101000994"
+            },
+            "expected_error": "Username sudah digunakan"
+        }
+    },
+    "refresh_token_example": {
+        "step1_login": {
+            "emailOrPhone": "john.doe@example.com",
+            "password": "SecurePass@2024!"
+        },
+        "step2_refresh": {
+            "refreshToken": "will_be_returned_from_login_response"
+        },
+        "step3_logout": {
+            "refreshToken": "the_same_refresh_token"
+        }
+    },
+    "admin_credentials": {
+        "note": "Default admin account (for comparison with USER role)",
+        "login": {
+            "emailOrPhone": "admin_bpjs",
+            "password": "Admin@BPJS2024!"
+        }
+    },
+    "password_requirements": {
+        "min_length": 8,
+        "max_length": 128,
+        "must_contain": [
+            "uppercase letter (A-Z)",
+            "lowercase letter (a-z)",
+            "number (0-9)",
+            "special character (!@#$%^&*)"
+        ],
+        "valid_examples": [
+            "SecurePass@2024!",
+            "MyStrong@Pass123",
+            "Ahmad@Bpjs2024!",
+            "User@Password2024"
+        ],
+        "invalid_examples": [
+            "password (no uppercase, no number, no special)",
+            "Password (no number, no special)",
+            "Password123 (no special char)",
+            "Pass@1 (too short)"
+        ]
+    },
+    "endpoints_user_can_access": [
+        "GET /api/ktpkk",
+        "POST /api/ktpkk",
+        "GET /api/ktpkk/{nik}",
+        "PUT /api/ktpkk/{nik}",
+        "DELETE /api/ktpkk/{nik}",
+        "GET /api/bpjs",
+        "POST /api/bpjs",
+        "GET /api/bpjs/{id}",
+        "PUT /api/bpjs/{id}",
+        "DELETE /api/bpjs/{id}",
+        "GET /api/pembayaran",
+        "POST /api/pembayaran",
+        "GET /api/pembayaran/{id}",
+        "GET /api/loginactivity/my-activities"
+    ],
+    "endpoints_admin_only": [
+        "POST /api/bpjs/{id}/approve",
+        "POST /api/bpjs/{id}/deactivate",
+        "GET /api/loginactivity",
+        "GET /api/loginactivity/user/{username}"
+    ]
+}

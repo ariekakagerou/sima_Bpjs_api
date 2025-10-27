@@ -1,0 +1,485 @@
+{
+    "info": {
+        "_postman_id": "sima-bpjs-user-collection-2024",
+        "name": "SIMA BPJS API - User Testing",
+        "description": "Complete testing collection for USER role with auto-token management",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [{
+            "name": "1. Authentication",
+            "item": [{
+                    "name": "Register User - John Doe",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Status code is 201\", function () {",
+                                "    pm.response.to.have.status(201);",
+                                "});",
+                                "",
+                                "pm.test(\"User created successfully\", function () {",
+                                "    var jsonData = pm.response.json();",
+                                "    pm.expect(jsonData.username).to.eql(\"john_doe\");",
+                                "    pm.expect(jsonData.role).to.eql(\"USER\");",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"SecurePass@2024!\",\n  \"email\": \"john.doe@example.com\",\n  \"phoneNumber\": \"081234567890\",\n  \"dateOfBirth\": \"1995-05-15\",\n  \"nik\": \"3201011505950001\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "Register new user with USER role"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login with Email",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Status code is 200\", function () {",
+                                "    pm.response.to.have.status(200);",
+                                "});",
+                                "",
+                                "pm.test(\"Response has tokens\", function () {",
+                                "    var jsonData = pm.response.json();",
+                                "    pm.expect(jsonData.accessToken).to.exist;",
+                                "    pm.expect(jsonData.refreshToken).to.exist;",
+                                "});",
+                                "",
+                                "// Auto-save tokens to environment",
+                                "if (pm.response.code === 200) {",
+                                "    const response = pm.response.json();",
+                                "    pm.environment.set(\"access_token\", response.accessToken);",
+                                "    pm.environment.set(\"refresh_token\", response.refreshToken);",
+                                "    pm.environment.set(\"username\", response.username);",
+                                "    console.log(\"✅ Tokens saved to environment!\");",
+                                "    console.log(\"Access Token:\", response.accessToken.substring(0, 50) + \"...\");",
+                                "    console.log(\"Username:\", response.username);",
+                                "}"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"emailOrPhone\": \"john.doe@example.com\",\n  \"password\": \"SecurePass@2024!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with email and auto-save tokens"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login with Phone",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "if (pm.response.code === 200) {",
+                                "    const response = pm.response.json();",
+                                "    pm.environment.set(\"access_token\", response.accessToken);",
+                                "    pm.environment.set(\"refresh_token\", response.refreshToken);",
+                                "}"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"emailOrPhone\": \"081234567890\",\n  \"password\": \"SecurePass@2024!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with phone number"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Refresh Token",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Token refreshed\", function () {",
+                                "    pm.response.to.have.status(200);",
+                                "});",
+                                "",
+                                "// Auto-update access token",
+                                "if (pm.response.code === 200) {",
+                                "    const response = pm.response.json();",
+                                "    pm.environment.set(\"access_token\", response.accessToken);",
+                                "    console.log(\"✅ Access token refreshed!\");",
+                                "}"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/refresh",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "refresh"
+                            ]
+                        },
+                        "description": "Refresh access token when expired"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{
+                                "key": "token",
+                                "value": "{{access_token}}",
+                                "type": "string"
+                            }]
+                        },
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "logout"
+                            ]
+                        },
+                        "description": "Logout and revoke refresh token"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Authentication endpoints: Register, Login, Refresh, Logout"
+        },
+        {
+            "name": "2. BPJS Management",
+            "item": [{
+                    "name": "Get All BPJS",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{
+                                "key": "token",
+                                "value": "{{access_token}}",
+                                "type": "string"
+                            }]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/bpjs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bpjs"
+                            ]
+                        },
+                        "description": "Get all BPJS records (requires authentication)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get BPJS by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{
+                                "key": "token",
+                                "value": "{{access_token}}",
+                                "type": "string"
+                            }]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/bpjs/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bpjs",
+                                "1"
+                            ]
+                        },
+                        "description": "Get specific BPJS by ID"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "BPJS management endpoints"
+        },
+        {
+            "name": "3. KTP/KK Management",
+            "item": [{
+                "name": "Get All KTP/KK",
+                "request": {
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": [{
+                            "key": "token",
+                            "value": "{{access_token}}",
+                            "type": "string"
+                        }]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{base_url}}/api/ktpkk",
+                        "host": [
+                            "{{base_url}}"
+                        ],
+                        "path": [
+                            "api",
+                            "ktpkk"
+                        ]
+                    },
+                    "description": "Get all KTP/KK records"
+                },
+                "response": []
+            }],
+            "description": "KTP/KK management endpoints"
+        },
+        {
+            "name": "4. Login Activities",
+            "item": [{
+                "name": "Get My Login Activities",
+                "request": {
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": [{
+                            "key": "token",
+                            "value": "{{access_token}}",
+                            "type": "string"
+                        }]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{base_url}}/api/loginactivity/my-activities?limit=10",
+                        "host": [
+                            "{{base_url}}"
+                        ],
+                        "path": [
+                            "api",
+                            "loginactivity",
+                            "my-activities"
+                        ],
+                        "query": [{
+                            "key": "limit",
+                            "value": "10",
+                            "description": "Number of records to return"
+                        }]
+                    },
+                    "description": "Get own login activity history"
+                },
+                "response": []
+            }],
+            "description": "View your own login activity"
+        },
+        {
+            "name": "5. Error Testing",
+            "item": [{
+                    "name": "Test Weak Password",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Should return 400 for weak password\", function () {",
+                                "    pm.response.to.have.status(400);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"weak_test\",\n  \"password\": \"weak\",\n  \"email\": \"weak@test.com\",\n  \"phoneNumber\": \"081999999991\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "Test password validation - should fail"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Test Wrong Password",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Should return 401 for wrong password\", function () {",
+                                "    pm.response.to.have.status(401);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "method": "POST",
+                        "header": [{
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"emailOrPhone\": \"john.doe@example.com\",\n  \"password\": \"WrongPassword123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Test wrong password - run 5x to trigger lockout"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Test Admin-Only Endpoint",
+                    "event": [{
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test(\"Should return 403 Forbidden\", function () {",
+                                "    pm.response.to.have.status(403);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{
+                                "key": "token",
+                                "value": "{{access_token}}",
+                                "type": "string"
+                            }]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/loginactivity",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "loginactivity"
+                            ]
+                        },
+                        "description": "Test admin-only endpoint - should fail for USER role"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Error scenarios for testing validation and permissions"
+        }
+    ],
+    "variable": [{
+        "key": "base_url",
+        "value": "http://localhost:7189",
+        "type": "string"
+    }]
+}

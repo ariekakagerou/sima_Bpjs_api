@@ -1,0 +1,270 @@
+### ===================================
+### SIMA BPJS API - USER TESTING
+### ===================================
+### REST Client untuk VS Code
+### Install: REST Client extension
+### Usage: Click "Send Request" di atas setiap request
+### ===================================
+
+@baseUrl = http://localhost:5189
+@contentType = application/json
+
+### ===================================
+### 1. TEST API CONNECTION
+### ===================================
+
+### Test API is Working
+GET {{baseUrl}}/api/auth/test
+
+
+### ===================================
+### 2. REGISTER USER (Choose One)
+### ===================================
+
+### Register User 1: John Doe (RECOMMENDED)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "password": "SecurePass@2024!",
+  "email": "john.doe@example.com",
+  "phoneNumber": "081234567890",
+  "dateOfBirth": "1995-05-15",
+  "nik": "3201011505950001"
+}
+
+### Register User 2: Jane Smith
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "jane_smith",
+  "password": "MyStrong@Pass123",
+  "email": "jane.smith@example.com",
+  "phoneNumber": "082345678901",
+  "dateOfBirth": "1998-08-20",
+  "nik": "3201012008980002"
+}
+
+### Register User 3: Ahmad Budiman
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "ahmad_budiman",
+  "password": "Ahmad@Bpjs2024!",
+  "email": "ahmad.budiman@email.com",
+  "phoneNumber": "083456789012",
+  "dateOfBirth": "1990-12-10",
+  "nik": "3201011012900003"
+}
+
+### Register Quick Test User
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "test_user",
+  "password": "TestUser@2024!",
+  "email": "test.user@example.com",
+  "phoneNumber": "081234567999",
+  "dateOfBirth": "2000-01-01",
+  "nik": "3201010101000099"
+}
+
+
+### ===================================
+### 3. LOGIN USER (Choose One Method)
+### ===================================
+
+### Login with EMAIL
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "john.doe@example.com",
+  "password": "SecurePass@2024!"
+}
+
+### Login with PHONE NUMBER
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "081234567890",
+  "password": "SecurePass@2024!"
+}
+
+### Login with USERNAME
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "john_doe",
+  "password": "SecurePass@2024!"
+}
+
+### Login Test User
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "test.user@example.com",
+  "password": "TestUser@2024!"
+}
+
+
+### ===================================
+### 4. AUTHENTICATED REQUESTS
+### ===================================
+### ⚠️ COPY accessToken from login response
+### ⚠️ Replace {YOUR_TOKEN} dengan token yang didapat
+### ===================================
+
+@token = YOUR_ACCESS_TOKEN_HERE
+
+### Get All BPJS (with Auth)
+GET {{baseUrl}}/api/bpjs
+Authorization: Bearer {{token}}
+
+### Get All KTP/KK (with Auth)
+GET {{baseUrl}}/api/ktpkk
+Authorization: Bearer {{token}}
+
+### Get My Login Activities
+GET {{baseUrl}}/api/loginactivity/my-activities?limit=10
+Authorization: Bearer {{token}}
+
+### Get All Pembayaran
+GET {{baseUrl}}/api/pembayaran
+Authorization: Bearer {{token}}
+
+
+### ===================================
+### 5. REFRESH TOKEN
+### ===================================
+### ⚠️ Replace {YOUR_REFRESH_TOKEN} with token from login response
+### ===================================
+
+@refreshToken = YOUR_REFRESH_TOKEN_HERE
+
+### Refresh Access Token
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+
+### ===================================
+### 6. LOGOUT
+### ===================================
+
+### Logout (Revoke Refresh Token)
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+
+### ===================================
+### 7. ERROR TESTING
+### ===================================
+
+### Test: Weak Password (Should FAIL)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "weak_pass_user",
+  "password": "weak",
+  "email": "weak@test.com",
+  "phoneNumber": "081999999991"
+}
+
+### Test: Wrong Password (5x to trigger lockout)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "john.doe@example.com",
+  "password": "WrongPassword123!"
+}
+
+### Test: Duplicate Username (Register twice)
+# First registration (should succeed)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "duplicate_test",
+  "password": "FirstUser@2024",
+  "email": "first@test.com",
+  "phoneNumber": "081999999993",
+  "nik": "3201010101000993"
+}
+
+###
+# Second registration with same username (should FAIL)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "duplicate_test",
+  "password": "SecondUser@2024",
+  "email": "second@test.com",
+  "phoneNumber": "081999999994",
+  "nik": "3201010101000994"
+}
+
+
+### ===================================
+### 8. ADMIN COMPARISON (For Testing)
+### ===================================
+
+### Login as Admin (for comparison)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "emailOrPhone": "admin_bpjs",
+  "password": "Admin@BPJS2024!"
+}
+
+### Test Admin-Only Endpoint (should FAIL if logged in as USER)
+GET {{baseUrl}}/api/loginactivity
+Authorization: Bearer {{token}}
+
+
+### ===================================
+### NOTES:
+### ===================================
+### 
+### 1. Jalankan requests secara berurutan:
+###    - Test API → Register → Login → Copy Token → Test Endpoints
+### 
+### 2. Token expires dalam 60 menit
+###    - Gunakan refresh token jika expired
+### 
+### 3. Account lockout setelah 5x failed login
+###    - Tunggu 15 menit atau gunakan user lain
+### 
+### 4. Password requirements:
+###    - Min 8 chars
+###    - 1 uppercase, 1 lowercase, 1 number, 1 special char
+### 
+### 5. Login options:
+###    - Email, Phone Number, atau Username
+### 
+### 6. User role TIDAK bisa akses:
+###    - POST /api/bpjs/{id}/approve
+###    - POST /api/bpjs/{id}/deactivate
+###    - GET /api/loginactivity (all activities)
+### 
+### ===================================
+
