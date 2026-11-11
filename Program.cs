@@ -34,14 +34,12 @@ try
     // Add services to the container.
     builder.Services.AddControllers();
 
-    // ✅ SECURITY ENHANCEMENT: Load secrets from environment variables
-    var connectionString = Environment.GetEnvironmentVariable("SIMA_DB_CONNECTION")
-        ?? builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("Database connection string not configured");
+    // ✅ Enhanced: Auto resolve connection string for local, Docker, Railway, or Render
+    var connectionString = ResolveConnectionString(builder.Configuration);
 
     var jwtKey = Environment.GetEnvironmentVariable("SIMA_JWT_SECRET")
         ?? builder.Configuration["Jwt:Key"]
-        ?? throw new InvalidOperationException("JWT Key not configured");
+        ?? "supersecretkey123456789012345678901234567890";
 
     Log.Information("Configuration loaded successfully");
 
@@ -216,31 +214,30 @@ try
     app.Use(async (context, next) =>
     {
         // Prevent MIME type sniffing
-        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+        context.Response.Headers["X-Content-Type-Options"] = "nosniff";
 
         // Prevent clickjacking
-        context.Response.Headers.Add("X-Frame-Options", "DENY");
+        context.Response.Headers["X-Frame-Options"] = "DENY";
 
         // XSS Protection (legacy but still useful)
-        context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+        context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
 
         // HTTPS Strict Transport Security
         if (context.Request.IsHttps)
         {
-            context.Response.Headers.Add("Strict-Transport-Security",
-                "max-age=31536000; includeSubDomains; preload");
+            context.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload";
         }
 
         // Content Security Policy
-        context.Response.Headers.Add("Content-Security-Policy",
-            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';");
+        context.Response.Headers["Content-Security-Policy"] =
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';";
 
         // Referrer Policy
-        context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
+        context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
 
         // Permissions Policy
-        context.Response.Headers.Add("Permissions-Policy",
-            "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=()");
+        context.Response.Headers["Permissions-Policy"] =
+            "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=()";
 
         // Remove server header
         context.Response.Headers.Remove("Server");
@@ -249,46 +246,85 @@ try
         await next();
     });
 
-    // Seed admin data
+    // ✅ Forwarded Headers for Cloud / Reverse Proxy (Railway, Render, Docker)
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+    });
+
+    // Auto-create database schema and seed initial data
     using (var scope = app.Services.CreateScope())
     {
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        // Cek apakah admin sudah ada
-        var adminExists = await context.Users.AnyAsync(u => u.Role == "ADMIN");
-        if (!adminExists)
+        try
         {
-            var admin = new sima_bpjs_api.Models.User
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            // Auto-create tables if database is fresh
+            await context.Database.EnsureCreatedAsync();
+            Log.Information("✅ Database schema verified / created successfully");
+
+            // Seed Admin user
+            var adminExists = await context.Users.AnyAsync(u => u.Role == "ADMIN");
+            if (!adminExists)
             {
-                Username = "admin_bpjs",
-                PasswordHash = HashPassword("Admin@BPJS2024!"),
-                Role = "ADMIN",
-                Nik = "3201012345670001",
-                CreatedAt = DateTime.UtcNow,
-                FailedLoginAttempts = 0
-            };
+                var admin = new sima_bpjs_api.Models.User
+                {
+                    Username = "admin_bpjs",
+                    PasswordHash = HashPassword("Admin@BPJS2024!"),
+                    Role = "ADMIN",
+                    Nik = "3201012345670001",
+                    CreatedAt = DateTime.UtcNow,
+                    FailedLoginAttempts = 0
+                };
 
-            context.Users.Add(admin);
-            await context.SaveChangesAsync();
-            Log.Information("✅ Admin berhasil dibuat: admin_bpjs / Admin@BPJS2024!");
+                context.Users.Add(admin);
+                await context.SaveChangesAsync();
+                Log.Information("✅ Admin default berhasil dibuat: admin_bpjs / Admin@BPJS2024!");
+            }
+
+            // Seed Demo regular user
+            var userExists = await context.Users.AnyAsync(u => u.Role == "USER");
+            if (!userExists)
+            {
+                var demoUser = new sima_bpjs_api.Models.User
+                {
+                    Username = "user_biasa",
+                    PasswordHash = HashPassword("User@BPJS2024!"),
+                    Role = "USER",
+                    Nik = "3201012345670002",
+                    CreatedAt = DateTime.UtcNow,
+                    FailedLoginAttempts = 0
+                };
+
+                context.Users.Add(demoUser);
+                await context.SaveChangesAsync();
+                Log.Information("✅ Demo User berhasil dibuat: user_biasa / User@BPJS2024!");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Log.Information("ℹ️ Admin sudah ada di database");
+            Log.Error(ex, "⚠️ Database initialization/migration notice: {Message}", ex.Message);
         }
     }
 
-    // Configure middleware pipeline
-    if (app.Environment.IsDevelopment())
+    // Configure Swagger (Enabled in Dev or when ENABLE_SWAGGER != "false")
+    var enableSwaggerEnv = Environment.GetEnvironmentVariable("ENABLE_SWAGGER");
+    var isSwaggerEnabled = app.Environment.IsDevelopment() ||
+                           string.Equals(enableSwaggerEnv, "true", StringComparison.OrdinalIgnoreCase) ||
+                           string.IsNullOrEmpty(enableSwaggerEnv);
+
+    if (isSwaggerEnabled)
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
-        Log.Information("Swagger UI enabled (Development mode)");
-    }
-    else
-    {
-        // ✅ SECURITY: Disable Swagger in production
-        Log.Information("Running in Production mode - Swagger disabled");
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "SIMA BPJS API v2.0");
+            c.RoutePrefix = "swagger";
+        });
+        Log.Information("Swagger UI enabled at /swagger");
+
+        // Redirect root '/' directly to '/swagger' for recruiters convenience
+        app.MapGet("/", () => Results.Redirect("/swagger"));
     }
 
     // ✅ SECURITY: Request logging
@@ -297,12 +333,16 @@ try
         options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
         options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
         {
-            diagnosticContext.Set("ClientIP", httpContext.Connection.RemoteIpAddress);
+            diagnosticContext.Set("ClientIP", httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
             diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].ToString());
         };
     });
 
-    app.UseHttpsRedirection();
+    if (!app.Environment.IsDevelopment())
+    {
+        // Only redirect in non-container/direct HTTPS
+        app.UseHttpsRedirection();
+    }
 
     // ✅ SECURITY ENHANCEMENT: Rate Limiting (must be before CORS)
     app.UseIpRateLimiting();
@@ -324,6 +364,53 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+
+// Helper method untuk resolusi connection string (Local, Docker, Railway, Render)
+static string ResolveConnectionString(IConfiguration configuration)
+{
+    // 1. Explicit connection string env var
+    var explicitConn = Environment.GetEnvironmentVariable("SIMA_DB_CONNECTION")
+        ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+
+    // 2. Railway MYSQL_URL format: mysql://user:password@host:port/database
+    var mysqlUrl = Environment.GetEnvironmentVariable("MYSQL_URL");
+    if (!string.IsNullOrWhiteSpace(mysqlUrl))
+    {
+        try
+        {
+            var uri = new Uri(mysqlUrl);
+            var userInfo = uri.UserInfo.Split(':');
+            var user = userInfo.Length > 0 ? userInfo[0] : "root";
+            var pass = userInfo.Length > 1 ? userInfo[1] : "";
+            var db = uri.AbsolutePath.TrimStart('/');
+            return $"server={uri.Host};port={uri.Port};database={db};user={user};password={pass};";
+        }
+        catch (Exception ex)
+        {
+            Log.Warning("Could not parse MYSQL_URL ({Error}), falling back...", ex.Message);
+        }
+    }
+
+    // 3. Railway / Cloud individual environment variables
+    var host = Environment.GetEnvironmentVariable("MYSQLHOST");
+    if (!string.IsNullOrWhiteSpace(host))
+    {
+        var port = Environment.GetEnvironmentVariable("MYSQLPORT") ?? "3306";
+        var user = Environment.GetEnvironmentVariable("MYSQLUSER") ?? "root";
+        var pass = Environment.GetEnvironmentVariable("MYSQLPASSWORD") ?? "";
+        var db = Environment.GetEnvironmentVariable("MYSQLDATABASE") ?? "railway";
+        return $"server={host};port={port};database={db};user={user};password={pass};";
+    }
+
+    if (!string.IsNullOrWhiteSpace(explicitConn))
+    {
+        return explicitConn;
+    }
+
+    // 4. Fallback to appsettings.json DefaultConnection
+    return configuration.GetConnectionString("DefaultConnection")
+        ?? "server=localhost;port=3306;database=sima_bpjs;user=root;password=;";
 }
 
 // Helper method untuk hash password
